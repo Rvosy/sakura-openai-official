@@ -4,15 +4,13 @@
 
 ## 运行要求
 
-插件使用 Sakura Plugin API 4，依赖“OpenAI 兼容模型”基础插件和宿主的 Artifact、模型用途、设置服务。请保持基础插件启用，它提供模型服务工作台。
-
-本插件还依赖尚未发布的 Sakura 配套改动：公共 SDK 的 `sakura_model_provider`、`sakura_openai_responses` 模块，以及模型服务贡献接口和 OpenAI 图标。使用前需准备包含这些改动的 Sakura 开发版本。
+需要 Sakura 1.3.6 或更高版本。插件使用 Sakura Plugin API 4，依赖“OpenAI 兼容模型”基础插件和宿主的 Artifact、模型用途、设置服务。请保持基础插件启用，它提供模型服务工作台。
 
 Python 依赖见 [requirements.txt](requirements.txt)，由 Sakura 安装：`openai==2.43.0`、`httpx[socks]==0.28.1`。
 
 ## 使用
 
-1. 下载或克隆本仓库，在 Sakura 的“设置 → 插件”中从文件夹安装，启用并应用。
+1. 在 Sakura 的“设置 → 插件”中从 ZIP 安装 `Sakura-OpenAI-Official-0.1.1.sakplugin.zip`，启用并应用；源码开发也可从文件夹安装。
 2. 打开“模型服务 → 添加模型服务”，选择“OpenAI Official”。每次选择都会新建一条连接，可在右侧修改名称。
 3. 点击“登录 ChatGPT”，复制登录代码到浏览器打开的登录页。登录成功后自动获取并保存全部可用模型。账号面板始终保留“刷新模型”，可以同步新模型或在失败后重试。
 4. 到“模型”页把对话模型换成 Codex 模型。视觉对话或其他插件用途也在此选择。
@@ -48,9 +46,14 @@ Python 依赖见 [requirements.txt](requirements.txt)，由 Sakura 安装：`ope
 ```powershell
 $env:SAKURA_SOURCE = 'D:\Project\sakura'
 & "$env:SAKURA_SOURCE\runtime\python.exe" -m pytest -q tests
+& "$env:SAKURA_SOURCE\runtime\python.exe" tools/build.py
+& "$env:SAKURA_SOURCE\runtime\python.exe" tools/verify_host.py --sakura "$env:SAKURA_SOURCE"
 ```
 
 macOS / Linux 使用 `SAKURA_SOURCE=/path/to/sakura /path/to/sakura/runtime/bin/python -m pytest -q tests`。测试覆盖设备码登录、令牌续期、多账号隔离、自动同步、取消重试和流式响应，使用模拟 HTTP，不连接真实账号。
+
+构建结果位于 `dist`，安装包只包含插件源码、默认配置、依赖声明和许可证，不包含本机账号、测试数据或开发缓存。
+`verify_host.py` 在临时用户目录安装 ZIP 与依赖，验证实际插件进程中的模型服务注册、连接添加与删除、停用回收，不连接真实账号。
 
 ## 许可证与参考
 

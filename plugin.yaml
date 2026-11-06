@@ -3,7 +3,8 @@ id: sakura.model.codex
 name: OpenAI Official
 author: Rvosy
 description: 登录 ChatGPT 账号，自动添加可用的 Codex 模型。
-version: 0.1.0
+version: 0.1.1
+min_app_version: "1.3.6"
 entry: plugin:CodexPlugin
 enabled: false
 provides:
@@ -13,6 +14,7 @@ requires:
   - sakura.host.artifacts
   - sakura.host.model_slots.v2
   - sakura.host.settings
+  - sakura.host.logging
 presentation:
   kind: provider
   category: model
